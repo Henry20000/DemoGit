@@ -11,11 +11,11 @@ const SliderComponent = ({arrImages}) => {
         slidesToShow: 1,
         slidesToScroll: 1,
         autoplay : true,
-        autoplaySpeed: 1000
+        autoplaySpeed: 3000
     };
     return (
         <Slider {...settings}>
-            {arrImages && arrImages.length > 0 && arrImages.map((image) => {
+            {arrImages && arrImages.length > 0 && arrImages.map((image) => {    
                 return (
                     <Image src={image} alt="slider" preview={false}  width= "100%" height="274px" />
                 )

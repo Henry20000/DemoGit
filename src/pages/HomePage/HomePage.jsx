@@ -13,8 +13,8 @@ import ButtonComponent from "../../components/ButtonCompnent/ButtonComponent";
 const HomePage = () => {
     const arr = [' Wheyprotein', 'Creatine', 'BCAAs, EAAs']
     return (
-      <>
-        <div style={{padding: '0 120px'}}>
+      <div style={{backgroundColor: '#efefef'}}>
+        <div style={{padding: '0 120px', backgroundColor: '#fff'}}>
             <WrapperTypeProduct>
             {arr.map((item) => {
                 return ( 
@@ -23,7 +23,7 @@ const HomePage = () => {
             })}
             </WrapperTypeProduct>
             </div>
-            <div id="container" style={{backgroundColor: '#efefef', padding:'0 120px', height: '1000px', width:'100%'}}>
+                <div id="container" style={{backgroundColor: '#efefef',margin: 'auto', height: '1000px', width:'80%'}}>      
                <SliderComponent arrImages={[slider1, slider2, slider3]}/>   
                <WrapperProducts>
                   <CardComponent/>
@@ -38,16 +38,15 @@ const HomePage = () => {
                </WrapperProducts>
                <div style={{ width: '100%', display: 'flex', justifyContent: 'center', marginTop: '10px'}}>
                 <WrapperButtonMore 
-                  textButton="see more" 
+                  textButton="See more" 
                   type="outline" 
                   styleButton={{border: '1px solid rgb(11, 116, 229)', color: 'rgb(11, 116, 229)', width: '240px', height: '38px', borderRadius: '4px' 
                 }}
                   styleTextButton={{ fontWeight: 500}}/>
-               </div>
-              
-            </div>
-      </>
-    )
+               </div>  
+          </div>
+      </div>
+  )
 }
 
 export default HomePage
