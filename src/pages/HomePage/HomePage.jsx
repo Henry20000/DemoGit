@@ -13,7 +13,7 @@ const HomePage = () => {
     const arr = [' Wheyprotein', 'Creatine', 'BCAAs, EAAs']
     return (
       <div style={{backgroundColor: '#efefef'}}>
-        <div style={{padding: '0 120px', backgroundColor: '#fff'}}>
+        <div style={{padding: '0 30px', backgroundColor: '#fff', fontSize: '12px'}}>
             <WrapperTypeProduct>
             {arr.map((item) => {
                 return ( 
@@ -22,19 +22,20 @@ const HomePage = () => {
             })}
             </WrapperTypeProduct>
             </div>
-                <div id="container" style={{backgroundColor: '#efefef',margin: 'auto', height: '1000px', width:'80%'}}>      
-               <SliderComponent arrImages={[slider1, slider2, slider3]}/>   
-               <WrapperProducts>
-                  <CardComponent/>
-                  <CardComponent/>
-                  <CardComponent/>
-                  <CardComponent/>
-                  <CardComponent/>
-                  <CardComponent/>
-                  <CardComponent/>
-                  <CardComponent/>
-                  <CardComponent/>
-               </WrapperProducts>
+            <div className='body' style={{ width: '100%', background: '#efefef', }}/>
+              <div id="container" style={{ height: '1000px', width:'1270px', margin: '0 auto' }}>      
+                <SliderComponent arrImages={[slider1, slider2, slider3]}/>   
+                <WrapperProducts>
+                    <CardComponent/>
+                    <CardComponent/>
+                    <CardComponent/>
+                    <CardComponent/>
+                    <CardComponent/>
+                    <CardComponent/>
+                    <CardComponent/>
+                    <CardComponent/>
+                    <CardComponent/>
+                </WrapperProducts>
                <div style={{ width: '100%', display: 'flex', justifyContent: 'center', marginTop: '10px'}}>
                 <WrapperButtonMore 
                   textButton="See more" 
