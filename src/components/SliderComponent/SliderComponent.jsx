@@ -3,6 +3,7 @@ import { Image } from "antd";
 import { WrapperSliderStyle } from "./style";
 
 
+// eslint-disable-next-line react/prop-types
 const SliderComponent = ({ arrImages }) => {
     const settings = {
         dots: true,
@@ -17,7 +18,7 @@ const SliderComponent = ({ arrImages }) => {
         <WrapperSliderStyle {...settings}>
             {arrImages && arrImages.length > 0 && arrImages.map((image) => {    
                 return (
-                    <Image src={image} alt="slider" preview={false}  width= "100%" height="274px" />
+                    <Image key={image}src={image} alt="slider" preview={false}  width= "100%" height="274px" />
                 )
             })}
         </WrapperSliderStyle>
