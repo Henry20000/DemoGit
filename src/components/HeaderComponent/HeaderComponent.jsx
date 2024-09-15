@@ -9,12 +9,16 @@ import {
 } from '@ant-design/icons';
 import ButtonInputSearch from '../ButtonInputSearch/ButtonInputSearch';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const HeaderComponent = () => {
   const navigate = useNavigate()
+  const user = useSelector((state) => state.user)
   const handleNavigateLogin = () => {
     navigate('/sign-in')  
   }
+
+  console.log('user', user);
   return (
     <div style={{ width: '100%', background: 'rgb(26, 148, 255)', display: 'flex', justifyContent: 'center', padding: '10px'}}>
       <WrapperHeader>
@@ -24,7 +28,7 @@ const HeaderComponent = () => {
         <Col span={13}>
           <ButtonInputSearch
             size="large"
-            bordered={false}
+            variant={false}
             textButton="Search"
             placeholder="input search text" 
             //onSearch={onSearch}
@@ -33,12 +37,16 @@ const HeaderComponent = () => {
         <Col span={6} style = {{ display: 'flex', gap: '54px', alignItems: 'center'}}>
           <WrapperHeaderAccout>
             <UserOutlined style={{ fontSize: '30px' }} />
-            <div onClick={handleNavigateLogin} style={{ cursor: 'pointer'}}>
+            {user?.name ? (
+              <div style={{ cursor: 'pointer'}}>{user.name}</div>
+            ) : (
+              <div onClick={handleNavigateLogin} style={{ cursor: 'pointer'}}>
               <WrapperTextHeaderSmall>Log in / Register</WrapperTextHeaderSmall>
               <div>
               <WrapperTextHeaderSmall>Account</WrapperTextHeaderSmall> <CaretDownOutlined/>
               </div>
             </div>
+            )}
           </WrapperHeaderAccout>
           <div style = {{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px'}}>
             <Badge count={4} size="small">

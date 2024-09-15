@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { WrapperContainerLeft, WrapperContainerRight, WrapperTextLight } from "./style"
 import InputForm from "../../components/InputForm/InputForm"
 import ButtonComponent from "../../components/ButtonCompnent/ButtonComponent"
@@ -9,11 +9,15 @@ import { useNavigate } from "react-router-dom"
 import * as UserService from '../../services/UserService'
 import { useMutationHooks } from "../../hooks/useMutationHook"
 import Loading from "../../components/LoadingComponent/Loading"
+import { jwtDecode } from "jwt-decode";
+import { useDispatch } from 'react-redux'
+import { updateUser } from "../../redux/slides/userSlide"
 
 const SignInPage = () => {
     const [isShowPassword, setIsShowPassword] = useState(false)
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const dispatch = useDispatch();
     
     const navigate = useNavigate()
 
@@ -21,7 +25,26 @@ const SignInPage = () => {
         data => UserService.loginUser(data)
     )
 
-    const { data, isPending } = mutation
+    const { data, isPending, isSuccess } = mutation
+
+    useEffect(() => {
+        if (isSuccess) {
+            navigate('/')
+            localStorage.setItem('access_token', data?.access_token)
+            if(data?.access_token) {
+                const decoded = jwtDecode(data?.access_token)
+                console.log('decode', decoded)
+                if(decoded?.id) {
+                    handleGetDetailsUser(decoded?.id, data?.access_token)
+                }
+            }
+        }
+    }, [isSuccess])
+
+    const handleGetDetailsUser = async (id, token) => {
+         const res = await UserService.getDetailsUser(id, token)
+         dispatch(updateUser({ ...res?.data, access_token: token }))
+    }
 
     console.log('mutation', mutation)
     console.log('isPending', isPending) 
