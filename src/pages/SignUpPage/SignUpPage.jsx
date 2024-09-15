@@ -7,6 +7,9 @@ import { Image } from "antd"
 import { EyeFilled, EyeInvisibleFilled } from '@ant-design/icons'
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
+import * as UserService from '../../services/UserService'
+import { useMutationHooks } from "../../hooks/useMutationHook";
+import Loading from "../../components/LoadingComponent/Loading";
 
 const SignUpPage = () => {
     const navigate = useNavigate()  
@@ -20,6 +23,12 @@ const SignUpPage = () => {
         setEmail(value)
     }
 
+    const mutation = useMutationHooks( 
+        data => UserService.signupUser(data)    
+    )
+
+    const { data, isPending } = mutation
+
     const handleOnchangePassword = (value) => {
         setPassword(value)
     }
@@ -32,8 +41,8 @@ const SignUpPage = () => {
         navigate('/sign-in')
     }
 
-    const handleSignUp = () => {
-        console.log('sign-up', email, password, confirmPassword)
+    const handleSignUp = () => { 
+        mutation.mutate({email, password, confirmPassword})  
     }
 
     return (
@@ -86,6 +95,8 @@ const SignUpPage = () => {
                     value={confirmPassword} onChange={handleOnchangeConfirmPassword}
                     />
                 </div>
+                    {data?.status === 'ERR' && <span>{data?.message}</span>}
+                    <Loading isLoading={isPending}>
                         <ButtonComponent
                             disabled={!email.length || !password.length || !confirmPassword.length}
                             onClick={handleSignUp}
@@ -101,6 +112,7 @@ const SignUpPage = () => {
                             textButton={'Register'}
                             styleTextButton={{ color: '#fff', fontSize: '15px', fontWeight: '700' }}
                         ></ButtonComponent>
+                    </Loading>
                         <p style={{fontSize: '13px'}}>Do you already have an account? <WrapperTextLight onClick={handleNavigateSignIn}>Log in</WrapperTextLight></p>
                 </WrapperContainerLeft>
                 <WrapperContainerRight>

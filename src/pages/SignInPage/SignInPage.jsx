@@ -6,6 +6,9 @@ import imageLogo from '../../assets/images/logo-login.png'
 import { Image } from "antd"
 import { EyeFilled, EyeInvisibleFilled } from '@ant-design/icons'
 import { useNavigate } from "react-router-dom"
+import * as UserService from '../../services/UserService'
+import { useMutationHooks } from "../../hooks/useMutationHook"
+import Loading from "../../components/LoadingComponent/Loading"
 
 const SignInPage = () => {
     const [isShowPassword, setIsShowPassword] = useState(false)
@@ -13,6 +16,18 @@ const SignInPage = () => {
     const [password, setPassword] = useState('');
     
     const navigate = useNavigate()
+
+    const mutation = useMutationHooks( 
+        data => UserService.loginUser(data)
+    )
+
+    const { data, isPending } = mutation
+
+    console.log('mutation', mutation)
+    console.log('isPending', isPending) 
+
+
+
     const handleNavigateSignUp = () => {
         navigate('/sign-up')
     } 
@@ -26,6 +41,10 @@ const SignInPage = () => {
     }
 
     const handleSignIn = () => {
+        mutation.mutate({
+            email,
+            password
+        })
         console.log('sign-in', email, password)
     }
     return (
@@ -56,6 +75,8 @@ const SignInPage = () => {
                     <InputForm placeholder="password" type={isShowPassword ? "text" : "password"} 
                     value={password} onChange={handleOnchangePassword} />
                 </div>
+                    {data?.status === 'ERR' && <span style={{ color: 'red' }}>{data?.message}</span>}
+                    <Loading isLoading={isPending}>     
                         <ButtonComponent
                             disabled={!email.length || !password.length}
                             onClick={handleSignIn}
@@ -71,6 +92,7 @@ const SignInPage = () => {
                             textButton={'Log in'}
                             styleTextButton={{ color: '#fff', fontSize: '15px', fontWeight: '700' }}
                         ></ButtonComponent>
+                    </Loading>
                         <p><WrapperTextLight>Forgot password?</WrapperTextLight></p>
                         <p style={{fontSize: '13px'}}>Don't have an account yet? <WrapperTextLight onClick={handleNavigateSignUp}> Create account</WrapperTextLight></p>  
                 </WrapperContainerLeft>
