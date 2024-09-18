@@ -5,7 +5,8 @@ import logo from '../../assets/images/logo.png'
 
 
 
-const CardComponent = () => {
+const CardComponent = (props) => {
+   const {countInStock, description, image, name, price, rating, type, discount, selled} = props
     return (
     <WrapperCardStyle
       hoverable
@@ -24,17 +25,17 @@ const CardComponent = () => {
               borderTopLeftRadius: '3px'
            }}
         />
-        <StyleNameProduct>Nutrabolics</StyleNameProduct>
+        <StyleNameProduct>{name}</StyleNameProduct>
         <WrapperReporText>
         <span style={{marginRight: '4px'}}>
-            <span> Nutrabolics </span> <StarFilled style={{ fontSize: '12px', color: 'rgb(253, 216, 54)'}} />
+            <span> {rating} </span> <StarFilled style={{ fontSize: '12px', color: 'rgb(253, 216, 54)'}} />
         </span>
-        <WrapperStyleTextSell>| Sold 1000+ </WrapperStyleTextSell>
+        <WrapperStyleTextSell>| Sold {selled || 1000}+ </WrapperStyleTextSell>
         </WrapperReporText>
         <WrapperPriceText>
-           <span style={{ marginRight: '8px'}}>1.750.000đ</span>
+           <span style={{ marginRight: '8px'}}>{price}</span>
            <WrapperDiscountText>
-              -15%
+              {discount || 15} %
            </WrapperDiscountText>
         </WrapperPriceText>
     </WrapperCardStyle>
