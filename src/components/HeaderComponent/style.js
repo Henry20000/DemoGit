@@ -6,15 +6,12 @@ export const WrapperHeader = styled(Row)`
     align-items: center;   
     gap: 16px;
     flex-wrap: nowrap; 
-    width: 1270px
-    padding: 10px 0;
+  
 `
 
 export const WrapperTextHeader = styled.span`
     font-size: 18px;
     color: #fff;
-    font-weight: bold,
-    text-align: left;
     padding: 0 300px;
     padding-left: inherit;
 `
