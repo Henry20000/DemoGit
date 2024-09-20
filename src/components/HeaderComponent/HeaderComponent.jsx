@@ -53,7 +53,7 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
 
   return (
     <div style={{ width: '100%', background: 'rgb(26, 148, 255)', display: 'flex', justifyContent: 'center', padding: '10px', boxSizing: 'border-box'}}>
-      <WrapperHeader style={{ justifyContent: isHiddenSearch && isHiddenSearch ? 'space-between' : 'unset'}}>
+      <WrapperHeader style={{ justifyContent: isHiddenSearch && isHiddenSearch ? 'space-between' : 'unset', margin: 'auto', width: '70%'}}>
         <Col span={5}>
           <WrapperTextHeader>GYMISEASY</WrapperTextHeader>
         </Col>
