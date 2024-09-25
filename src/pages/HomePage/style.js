@@ -17,8 +17,9 @@ export const WrapperButtonMore = styled(ButtonComponent)`
           color: #fff;
        }
     }
-       widtth: 100%;
+       width: 100%;
        text-align: center;
+       cursor: ${(props) => props.disabled ? 'not-allowed' : 'pointers'}
 `
 
 export const WrapperProducts = styled.div`

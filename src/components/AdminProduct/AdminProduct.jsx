@@ -1,5 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import { PlusOutlined, DeleteOutlined, EditOutlined, SearchOutlined } from "@ant-design/icons";
+import {
+  PlusOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 import { WrapperHeader } from "./style";
 import { Button, Form, Modal, Space } from "antd";
 import TableComponent from "../TableComponent/TableComponent";
@@ -7,7 +12,6 @@ import InputComponent from "../InputComponent/InputComponent";
 import { getBase64 } from "../../utils";
 import { WrapperUploadFile } from "./style";
 import * as ProductService from "../../services/ProductService";
-import { useMutationHooks } from "../../hooks/useMutationHook";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../../components/LoadingComponent/Loading";
@@ -22,8 +26,8 @@ const AdminProduct = () => {
   const [isPendingUpdate, setIsPendingUpdate] = useState(false);
   const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
   const user = useSelector((state) => state?.user);
-  const [searchText, setSearchText] = useState('');
-  const [searchedColumn, setSearchedColumn] = useState('');
+  const [searchText, setSearchText] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
 
   const [stateProduct, setStateProduct] = useState({
@@ -71,13 +75,23 @@ const AdminProduct = () => {
     },
   });
 
-  const mutationDelete = useMutation({
+  const mutationDeleted = useMutation({
     mutationFn: (data) => {
       const { id, token } = data;
       const res = ProductService.deleteProduct(id, token);
       return res;
     },
   });
+
+  const mutationDeletedMany = useMutation({
+    mutationFn: (data) => {
+      const { token, ...ids } = data;
+      const res = ProductService.deleteManyProduct(ids, token);
+      return res;
+    },
+  });
+
+  console.log("mutationDeletedMany", mutationDeletedMany);
 
   const getAllProducts = async () => {
     const res = await ProductService.getAllProduct();
@@ -105,14 +119,25 @@ const AdminProduct = () => {
   }, [form, stateProductDetails]);
 
   useEffect(() => {
-    if (rowSelected) {
+    if (rowSelected && isOpenDrawer) {
       setIsPendingUpdate(true);
       fetchGetDetailsProduct(rowSelected);
     }
-  }, [rowSelected]);
+  }, [rowSelected, isOpenDrawer]);
 
   const handleDetailsProduct = () => {
     setIsOpenDrawer(true);
+  };
+
+  const handleDeleteManyProducts = (ids) => {
+    mutationDeletedMany.mutate(
+      { id: ids, token: user?.access_token },
+      {
+        onSettled: () => {
+          queryProduct.refetch();
+        },
+      }
+    );
   };
 
   const { data, isPending, isSuccess, isError } = mutation;
@@ -127,7 +152,13 @@ const AdminProduct = () => {
     isPending: isPendingDeleted,
     isSuccess: isSuccessDeleted,
     isError: isErrorDeleted,
-  } = mutationDelete;
+  } = mutationDeleted;
+  const {
+    data: dataDeletedMany,
+    isPending: isPendingDeletedMany,
+    isSuccess: isSuccessDeletedMany,
+    isError: isErrorDeletedMany,
+  } = mutationDeletedMany;
 
   const queryProduct = useQuery({
     queryKey: ["products"],
@@ -161,7 +192,12 @@ const AdminProduct = () => {
   };
 
   const getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+    }) => (
       <div
         style={{
           padding: 8,
@@ -172,11 +208,13 @@ const AdminProduct = () => {
           ref={searchInput}
           placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
-          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
           onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
           style={{
             marginBottom: 8,
-            display: 'block',
+            display: "block",
           }}
         />
         <Space>
@@ -206,7 +244,7 @@ const AdminProduct = () => {
     filterIcon: (filtered) => (
       <SearchOutlined
         style={{
-          color: filtered ? '#1677ff' : undefined,
+          color: filtered ? "#1677ff" : undefined,
         }}
       />
     ),
@@ -233,14 +271,12 @@ const AdminProduct = () => {
     //   ),
   });
 
-
-
   const columns = [
     {
       title: "Name",
       dataIndex: "name",
       sorter: (a, b) => a.name.length - b.name.length,
-      ...getColumnSearchProps('name')
+      ...getColumnSearchProps("name"),
     },
     {
       title: "Price",
@@ -248,19 +284,19 @@ const AdminProduct = () => {
       sorter: (a, b) => a.price - b.price,
       filters: [
         {
-          text: '>= 50',
-          value: '>=',
+          text: ">= 50",
+          value: ">=",
         },
         {
-          text: '<= 50',
-          value: '<=',
-        }
+          text: "<= 50",
+          value: "<=",
+        },
       ],
       onFilter: (value, record) => {
-        if(value === '>=') {
-            return record.price >= 50
+        if (value === ">=") {
+          return record.price >= 50;
         }
-        return record.price <= 50
+        return record.price <= 50;
       },
     },
     {
@@ -269,19 +305,19 @@ const AdminProduct = () => {
       sorter: (a, b) => a.rating - b.rating,
       filters: [
         {
-          text: '>= 3',
-          value: '>=',
+          text: ">= 3",
+          value: ">=",
         },
         {
-          text: '<= 3',
-          value: '<=',
-        }
+          text: "<= 3",
+          value: "<=",
+        },
       ],
       onFilter: (value, record) => {
-        if(value === '>=') {
-            return Number(record.rating) >= 3
+        if (value === ">=") {
+          return Number(record.rating) >= 3;
         }
-        return Number(record.rating) <= 3
+        return Number(record.rating) <= 3;
       },
     },
     {
@@ -308,6 +344,14 @@ const AdminProduct = () => {
       message.error();
     }
   }, [isSuccess]);
+
+  useEffect(() => {
+    if (isSuccessDeletedMany && dataDeletedMany?.status === "OK") {
+      message.success();
+    } else if (isErrorDeletedMany) {
+      message.error();
+    }
+  }, [isSuccessDeletedMany]);
 
   useEffect(() => {
     if (isSuccessDeleted && dataDeleted?.status === "OK") {
@@ -347,11 +391,14 @@ const AdminProduct = () => {
   };
 
   const handleDeleteProduct = () => {
-    mutationDelete.mutate({ id: rowSelected, token: user?.access_token}, {
+    mutationDeleted.mutate(
+      { id: rowSelected, token: user?.access_token },
+      {
         onSettled: () => {
-            queryProduct.refetch()
-        }
-    })
+          queryProduct.refetch();
+        },
+      }
+    );
   };
 
   const handleCancel = () => {
@@ -441,6 +488,7 @@ const AdminProduct = () => {
       </div>
       <div style={{ marginTop: "20px" }}>
         <TableComponent
+          handleDeleteMany={handleDeleteManyProducts}
           columns={columns}
           isLoading={isLoadingProducts}
           data={dataTable}
@@ -454,6 +502,7 @@ const AdminProduct = () => {
         />
       </div>
       <ModalComponent
+        forceRender
         title="Create products"
         open={isModalOpen}
         onCancel={handleCancel}
@@ -474,7 +523,7 @@ const AdminProduct = () => {
               rules={[{ required: true, message: "Please input your name!" }]}
             >
               <InputComponent
-                value={stateProduct.name}
+                value={stateProduct["name"]}
                 onChange={handleOnchange}
                 name="name"
               />
@@ -725,7 +774,6 @@ const AdminProduct = () => {
           </Form>
         </Loading>
       </DrawerComponet>
-
       <ModalComponent
         title="Delete products"
         open={isModalOpenDelete}

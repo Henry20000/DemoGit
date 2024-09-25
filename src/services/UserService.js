@@ -13,13 +13,33 @@ export const signupUser = async (data) => {
 }
 
 export const getDetailsUser = async (id, access_token) => {
-    const res = await axiosJWT.get(`${import.meta.env.VITE_API_URL}/user/get-details/${id}`,{
+    const res = await axiosJWT.get(`${import.meta.env.VITE_API_URL}/user/get-details/${id}`, {
         headers: {
             token: `Bearer ${access_token}`,
         }
     })
     return res.data 
 }
+
+export const deleteUser = async (id, access_token ) => {
+  const res = await axiosJWT.delete(`${import.meta.env.VITE_API_URL}/user/delete-user/${id}`, {
+      headers: {
+        token: `Bearer ${access_token}`,
+      }
+    }
+  );
+  return res.data;
+};
+
+export const getAllUser = async (access_token) => {
+  const res = await axiosJWT.get(`${import.meta.env.VITE_API_URL}/user/getAll`, {
+      headers: {
+        token: `Bearer ${access_token}`,
+      },
+    }
+  );
+  return res.data;
+};
 
 export const refreshToken = async () => {
     const res = await axios.post(`${import.meta.env.VITE_API_URL}/user/refresh-token`, {
@@ -41,3 +61,16 @@ export const updateUser = async (id, data, access_token) => {
     })
     return res.data 
 }
+
+export const deleteManyUser = async (data, access_token) => {
+  const res = await axiosJWT.post(
+    `${import.meta.env.VITE_API_URL}/user/delete-many`,
+    data,
+    {
+      headers: {
+        token: `Bearer ${access_token}`,
+      },
+    }
+  );
+  return res.data;
+};
