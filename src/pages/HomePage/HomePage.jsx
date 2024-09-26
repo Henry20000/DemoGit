@@ -18,8 +18,8 @@ const HomePage = () => {
     const searchProduct = useSelector((state) => state?.product?.search)
     const searchDebounce = useDebounce(searchProduct, 1000)
     const [loading, setLoading] = useState(false)
-    const [limit, setLimit] = useState(3) 
-    const arr = [' Wheyprotein', 'Creatine', 'BCAAs, EAAs']
+    const [limit, setLimit] = useState(6) 
+    const [typeProducts, setTypeProducts] = useState([])
     const fetchProductAll = async (context) => {
       console.log("context", context);
       const limit = context?.queryKey && context?.queryKey[1]
@@ -28,6 +28,13 @@ const HomePage = () => {
 
          return res;    
     }
+    const fetchAllTypeProduct = async () => {
+      const res = await ProductService.getAllTypeProduct()
+      if(res?.status === 'OK') {
+          setTypeProducts(res?.data);
+      }
+    }
+
     const { isPending, data: products, isPreviousData } = useQuery({
       queryKey: ["products", limit, searchDebounce],
       queryFn: fetchProductAll,
@@ -35,7 +42,10 @@ const HomePage = () => {
       retryDelay: 1000,
       keepPreviousData: true
     });
-    console.log("isPreviousData", isPreviousData, isPending);
+    
+    useEffect(() => {
+      fetchAllTypeProduct()
+    }, [])
 
     return (
       <Loading isLoading={isPending || loading}>
@@ -48,8 +58,10 @@ const HomePage = () => {
             }}
           >
             <WrapperTypeProduct>
-              {arr.map((item) => {
-                return <TypeProduct name={item} key={item} />;
+              {typeProducts.map((item) => {
+                return (
+                  <TypeProduct name={item} key={item} />
+                )
               })}
             </WrapperTypeProduct>
           </div>
@@ -90,20 +102,28 @@ const HomePage = () => {
               }}
             >
               <WrapperButtonMore
-                textButton={isPreviousData ? 'Load more' : 'See more'}
+                textButton={isPreviousData ? "Load more" : "See more"}
                 type="outline"
                 styleButton={{
                   border: "1px solid rgb(11, 116, 229)",
-                  color: `${ products?.total === products?.data?.length ? "#ccc" : "rgb(11, 116, 229)" }`,
+                  color: `${
+                    products?.total === products?.data?.length
+                      ? "#ccc"
+                      : "rgb(11, 116, 229)"
+                  }`,
                   width: "240px",
                   height: "38px",
                   borderRadius: "4px",
                 }}
-                disabled={products?.total === products?.data?.length || products?.totalPage === 1}
+                disabled={
+                  products?.total === products?.data?.length ||
+                  products?.totalPage === 1
+                }
                 styleTextButton={{
                   fontWeight: 500,
-                  color: products?.total === products?.data?.length && '#fff' }}
-                onClick={() => setLimit((prev) => prev + 3)}
+                  color: products?.total === products?.data?.length && "#fff",
+                }}
+                onClick={() => setLimit((prev) => prev + 6)}
               />
             </div>
           </div>

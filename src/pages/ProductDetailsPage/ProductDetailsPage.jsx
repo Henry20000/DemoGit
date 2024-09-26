@@ -6,19 +6,10 @@ const ProductDetailsPage = () => {
   const {id} = useParams()
   const navigate = useNavigate()
     return (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          padding: "0 120px",
-          background: "#efefef",
-          height: "1000px",
-        }}
-      >
-        <h3>
-          <span style={{cursor: 'pointer', fontWeight: 'bold'}} onClick={() => {navigate("/");}}>Home page</span> - Product detail
-        </h3>
-        <ProductDetailsComponent idProduct={id} />
+      <div style={{ height: '100vh', width: '100%', background: '#efefef' }}>
+        <div style={{ width: '1270px', height: '100%', margin: '0 auto'}}>
+          <h3 style={{ padding: '10px 0'}}><span style={{cursor: 'pointer', fontWeight: 'bold'}} onClick={() => {navigate("/");}}>Home page</span> - Product detail</h3> <ProductDetailsComponent idProduct={id} />
+        </div>
       </div>
     );
 }
