@@ -4,10 +4,12 @@ import styled from "styled-components";
 export const WrapperCardStyle = styled(Card)`
    width: 200px;
    & img {
-      heigh: 200px;
-      width: 200px
-   },
-   position: relative
+      height: 200px;
+      width: 200px;
+   }
+   position: relative;
+   background-color: ${props => props.disabled ? '#ccc' : '#fff'};
+   cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'}
 `
 
 export const StyleNameProduct = styled.div`

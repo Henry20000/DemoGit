@@ -12,6 +12,8 @@ import { isPending } from "@reduxjs/toolkit"
 import { useDispatch, useSelector } from "react-redux"
 import { useLocation, useNavigate } from "react-router-dom"
 import { addOrderProduct } from "../../redux/slides/orderSlide"
+import { convertPrice } from "../../utils"
+
 
 
 const ProductDetailsComponent = ({idProduct}) => {
@@ -145,12 +147,12 @@ const ProductDetailsComponent = ({idProduct}) => {
             </div>
             <WrapperPriceProduct>
               <WrapperPriceTextProduct>
-                {productDetails?.price}
+                {convertPrice(productDetails?.price)}
               </WrapperPriceTextProduct>
             </WrapperPriceProduct>
             <WrapperAddressProduct>
               <span>Delivere </span>
-              <span className="address">{user?.address}</span> - 
+              <span className="address">{user?.address}</span> -
               <span className="change-address"> Change address</span>
             </WrapperAddressProduct>
             <div

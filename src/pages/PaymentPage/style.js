@@ -1,3 +1,4 @@
+import { Radio } from "antd";
 import styled from "styled-components";
 
 export const WrapperStyleHeader = styled.div`
@@ -58,14 +59,12 @@ export const WrapperInfo = styled.div`
   border-top-right-radius: 6px;
   border-top-left-radius: 6px;
   width: 280px;
-  /* display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 20px;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  height: 70px; */
+`;
+
+export const Lable = styled.span`
+  font-size: 12px;
+  color: #000;
+  font-weight: bold;
 `;
 
 export const WrapperTotal = styled.div`
@@ -85,4 +84,19 @@ export const WrapperTotal = styled.div`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   height: 50px; /* Chiều cao của thanh */
   margin-top: 5px;
+`;
+
+export const WrapperRadio = styled(Radio.Group)`
+  margin-top: 6px;
+  background: rgb(240, 248, 255);
+  border: 1px solid rgb(194, 225, 255);
+  width: 500px;
+  border-radius: 4px;
+  height: 100px;
+  padding: 16px;
+  font-weight: normal;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
 `;
