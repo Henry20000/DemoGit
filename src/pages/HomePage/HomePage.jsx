@@ -17,8 +17,7 @@ import { useDebounce } from "../../hooks/useDebounce";
 const HomePage = () => {
     const searchProduct = useSelector((state) => state?.product?.search)
     const searchDebounce = useDebounce(searchProduct, 500)
-    const [loading, setLoading] = useState(false)
-    const [limit, setLimit] = useState(6) 
+    const [limit, setLimit] = useState(6)
     const [typeProducts, setTypeProducts] = useState([])
     const fetchProductAll = async (context) => {
       console.log("context", context);
@@ -48,7 +47,7 @@ const HomePage = () => {
     }, [])
 
     return (
-      <Loading isLoading={isPending || loading}>
+      <Loading isLoading={isPending}>
         <div style={{ backgroundColor: "#efefef" }}>
           <div
             style={{

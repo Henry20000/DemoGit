@@ -21,6 +21,8 @@ import * as message from "../../components/Message/Message";
 import { updateUser } from "../../redux/slides/userSlide";
 import { useNavigate } from "react-router-dom";
 import { removeAllOrderProduct } from "../../redux/slides/orderSlide";
+import * as PaymentService from "../../services/PaymentService"
+import { PayPalButton } from "react-paypal-button-v2";
 
 
 
@@ -31,6 +33,7 @@ const PaymentPage = () => {
   const [delivery, setDelivery] = useState('fast')
   const [payment, setPayment] = useState('later_money')
   const navigate = useNavigate()
+  const [sdkReady, setsdkReady] = useState(false)
 
   const [isOpenModalUpdateInfo, setIsOpenModalUpdateInfo] = useState(false)
    const [stateUserDetails, setStateUserDetails] = useState({
@@ -71,7 +74,8 @@ const PaymentPage = () => {
 
   const priceDiscountMemo = useMemo(() => {
     const result = order?.orderItemsSelected?.reduce((total, cur) => {
-      return total + ((cur.discount * cur.amount))
+      const totalDiscount = cur.discount ? cur.discount : 0
+      return total + (priceMemo * (totalDiscount * cur.amount) / 100)
     }, 0);
     if(Number(result)) {
       return result
@@ -170,6 +174,24 @@ const PaymentPage = () => {
        setIsOpenModalUpdateInfo(false)
   }
 
+  const onSuccessPaypal = (details, data) => {
+     mutationAddOrder.mutate({
+       token: user?.access_token,
+       orderItems: order?.orderItemsSelected,
+       fullName: user?.name,
+       address: user?.address,
+       phone: user?.phone,
+       city: user?.city,
+       paymentMethod: payment,
+       itemsPrice: priceMemo,
+       shippingPrice: diliveryPriceMemo,
+       totalPrice: totalPriceMemo,
+       user: user?.id,
+       isPaid: true,
+       paidAt: details.update_time
+     }); 
+  }
+
   const handleUpdateInfoUser = () => {
     const {name, address, city, phone} = stateUserDetails
     if(name && address && city && phone) {
@@ -203,7 +225,26 @@ const PaymentPage = () => {
     setPayment(e.target.value)
    }
 
- 
+   const addPaypalScript = async () => {
+    const { data }  = await PaymentService.getConfig()
+    const script = document.createElement('script')
+    script.type = 'text/javascript'
+    script.src = `https://www.paypal.com/sdk/js?client-id=${data}`
+    script.async = true;
+    script.onload = () => {
+      setsdkReady(true)
+    }
+    document.body.appendChild(script)
+    console.log('data', data);
+   }
+
+   useEffect(() => {
+    if(!window.paypal) {
+      addPaypalScript()
+    }else {
+      setsdkReady(true)
+    }
+   }, [])
 
   return (
     <div style={{ background: "#f5f5fa", width: "100%", height: "100vh" }}>
@@ -212,7 +253,7 @@ const PaymentPage = () => {
           <h3 style={{ padding: "10px 0" }}>Pay</h3>
           <div style={{ display: "flex", justifyContent: "center" }}>
             <WrapperLeft>
-              <WrapperInfo style={{ width: '800px'}}>
+              <WrapperInfo style={{ width: "800px" }}>
                 <div>
                   <Lable>Select delivery method</Lable>
                   <WrapperRadio onChange={handleDilivery} value={delivery}>
@@ -231,7 +272,7 @@ const PaymentPage = () => {
                   </WrapperRadio>
                 </div>
               </WrapperInfo>
-              <WrapperInfo style={{ width: '800px'}}>
+              <WrapperInfo style={{ width: "800px" }}>
                 <div>
                   <Lable>Choose payment method</Lable>
                   <WrapperRadio onChange={handlePayment} value={payment}>
@@ -291,7 +332,7 @@ const PaymentPage = () => {
                         fontWeight: "bold",
                       }}
                     >
-                      {`${priceDiscountMemo} %`}
+                      {convertPrice(priceDiscountMemo)}
                     </span>
                   </div>
                   <div
@@ -331,23 +372,35 @@ const PaymentPage = () => {
                   </span>
                 </WrapperTotal>
               </div>
-              <ButtonComponent
-                onClick={() => handleAddOrder()}
-                size={40}
-                styleButton={{
-                  background: "rgb(255, 57, 69)",
-                  height: "48px",
-                  width: "320px",
-                  border: "none",
-                  borderRadius: "4px",
-                }}
-                textButton={"Make an Order"}
-                styleTextButton={{
-                  color: "#fff",
-                  fontSize: "15px",
-                  fontWeight: "700",
-                }}
-              ></ButtonComponent>
+              {payment === "paypal" && sdkReady ? (
+                <div style={{ width: "320px" }}>
+                    <PayPalButton
+                      amount={(totalPriceMemo/25000).toFixed(2)}
+                      onSuccess={onSuccessPaypal}
+                      onError={() => {
+                        alert("Error");
+                      }}
+                    />
+                </div>
+              ) : (
+                <ButtonComponent
+                  onClick={() => handleAddOrder()}
+                  size={40}
+                  styleButton={{
+                    background: "rgb(255, 57, 69)",
+                    height: "48px",
+                    width: "320px",
+                    border: "none",
+                    borderRadius: "4px",
+                  }}
+                  textButton={"Make an Order"}
+                  styleTextButton={{
+                    color: "#fff",
+                    fontSize: "15px",
+                    fontWeight: "700",
+                  }}
+                ></ButtonComponent>
+              )}
             </WrapperRight>
           </div>
         </div>
