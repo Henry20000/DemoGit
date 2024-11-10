@@ -125,38 +125,54 @@ const OrderAdmin = () => {
         {
           title: "Phone",
           dataIndex: "phone",
-          sorter: (a, b) => a.phone.length - b.phone.length,
-          ...getColumnSearchProps("phone"),
+          //sorter: (a, b) => a.phone.length - b.phone.length,
+          //...getColumnSearchProps("phone"),
         },
         {
           title: "Address",
           dataIndex: "address",
-          sorter: (a, b) => a.address.length - b.address.length,
-          ...getColumnSearchProps("address"),
+          //sorter: (a, b) => a.address.length - b.address.length,
+          //...getColumnSearchProps("address"),
         },
         {
           title: "Paided",
           dataIndex: "isPaid",
-          sorter: (a, b) => a.isPaid.length - b.isPaid.length,
-          ...getColumnSearchProps("isPaid"),
+          //sorter: (a, b) => a.isPaid.length - b.isPaid.length,
+          //...getColumnSearchProps("isPaid"),
         },
         {
           title: "Shipped",
           dataIndex: "isDelivered",
-          sorter: (a, b) => a.isDelivered.length - b.isDelivered.length,
-          ...getColumnSearchProps("isDelivered"),
+          //sorter: (a, b) => a.isDelivered.length - b.isDelivered.length,
+          //...getColumnSearchProps("isDelivered"),
         },
         {
           title: "Payment method",
           dataIndex: "paymentMethod",
-          sorter: (a, b) => a.paymentMethod.length - b.paymentMethod.length,
-          ...getColumnSearchProps("paymentMethod"),
+          //sorter: (a, b) => a.paymentMethod.length - b.paymentMethod.length,
+          //...getColumnSearchProps("paymentMethod"),
         },
         {
           title: "Total price",
           dataIndex: "totalPrice",
-          sorter: (a, b) => a.totalPrice.length - b.totalPrice.length,
-          ...getColumnSearchProps("totalPrice"),
+          //sorter: (a, b) => a.totalPrice.length - b.totalPrice.length,
+          //...getColumnSearchProps("totalPrice"),
+          filters: [
+            {
+              text: ">= 2,000,000 VND",
+              value: ">=",
+            },
+            {
+              text: "<= 2,000,000 VND",
+              value: "<=",
+            },
+          ],
+          onFilter: (value, record) => {
+            if (value === ">=") {
+              return record.totalPrice >= 2000000; 
+            }
+            return record.totalPrice <= 2000000; 
+          },
         },
       ];
 

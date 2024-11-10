@@ -253,14 +253,14 @@ const AdminUser = () => {
         {
           title: "Email",
           dataIndex: "email",
-          sorter: (a, b) => a.email.length - b.email.length,
-          ...getColumnSearchProps("email"),
+          //sorter: (a, b) => a.email.length - b.email.length,
+          //...getColumnSearchProps("email"),
         },
         {
           title: "Address",
           dataIndex: "address",
-          sorter: (a, b) => a.address.length - b.address.length,
-          ...getColumnSearchProps("address"),
+          //sorter: (a, b) => a.address.length - b.address.length,
+          //...getColumnSearchProps("address"),
         },
         {
           title: "Admin",
@@ -275,12 +275,13 @@ const AdminUser = () => {
               value: false,
             },
           ],
+          onFilter: (value, record) => record.isAdmin === value,
         },
         {
           title: "Phone",
           dataIndex: "phone",
-          sorter: (a, b) => a.phone - b.phone,
-          ...getColumnSearchProps("phone"),
+          //sorter: (a, b) => a.phone - b.phone,
+          //...getColumnSearchProps("phone"),
         },
         {
           title: "Action",
