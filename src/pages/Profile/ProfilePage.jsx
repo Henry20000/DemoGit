@@ -116,7 +116,7 @@ const ProfilePage = () => {
                 borderRadius: "4px",
                 padding: "6px",
               }}
-              textButton={"Update"}
+              textbutton={"Update"}
               styleTextButton={{
                 color: "rgb(26, 148, 255)",
                 fontSize: "15px",
@@ -141,7 +141,7 @@ const ProfilePage = () => {
                 borderRadius: "4px",
                 padding: "6px",
               }}
-              textButton={"Update"}
+              textbutton={"Update"}
               styleTextButton={{
                 color: "rgb(26, 148, 255)",
                 fontSize: "15px",
@@ -166,7 +166,7 @@ const ProfilePage = () => {
                 borderRadius: "4px",
                 padding: "6px",
               }}
-              textButton={"Update"}
+              textbutton={"Update"}
               styleTextButton={{
                 color: "rgb(26, 148, 255)",
                 fontSize: "15px",
@@ -206,7 +206,7 @@ const ProfilePage = () => {
                 borderRadius: "4px",
                 padding: "6px",
               }}
-              textButton={"Update"}
+              textbutton={"Update"}
               styleTextButton={{
                 color: "rgb(26, 148, 255)",
                 fontSize: "15px",
@@ -231,7 +231,7 @@ const ProfilePage = () => {
                 borderRadius: "4px",
                 padding: "6px",
               }}
-              textButton={"Update"}
+              textbutton={"Update"}
               styleTextButton={{
                 color: "rgb(26, 148, 255)",
                 fontSize: "15px",

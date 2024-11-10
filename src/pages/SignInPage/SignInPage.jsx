@@ -37,7 +37,6 @@ const SignInPage = () => {
             localStorage.setItem('access_token', JSON.stringify(data?.access_token))
             if(data?.access_token) {
                 const decoded = jwtDecode(data?.access_token)
-                console.log('decode', decoded)
                 if(decoded?.id) {
                     handleGetDetailsUser(decoded?.id, data?.access_token)
                 }
@@ -49,11 +48,6 @@ const SignInPage = () => {
          const res = await UserService.getDetailsUser(id, token)
          dispatch(updateUser({ ...res?.data, access_token: token }))
     }
-
-    console.log('mutation', mutation)
-    console.log('isPending', isPending) 
-
-
 
     const handleNavigateSignUp = () => {
         navigate('/sign-up')
@@ -72,7 +66,6 @@ const SignInPage = () => {
             email,
             password
         })
-        console.log('sign-in', email, password)
     }
     return (
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0, 0, 0, 0.53)', height: '100vh'}}>
@@ -116,7 +109,7 @@ const SignInPage = () => {
                                 borderRadius: '4px',
                                 margin: '26px 0 10px' 
                             }}  
-                            textButton={'Log in'}
+                            textbutton={'Log in'}
                             styleTextButton={{ color: '#fff', fontSize: '15px', fontWeight: '700' }}
                         ></ButtonComponent>
                     </Loading>

@@ -1,24 +1,25 @@
 import { Col, Image, Rate, Row } from "antd"
-import React, { useState } from "react"
-import imageProduct from '../../assets/images/test.webp'
+import React, { useEffect, useState } from "react"
 import imageProductSmall from '../../assets/images/imagesmall.webp'
 import { WrapperAddressProduct, WrapperInputNumber, WrapperPriceProduct, WrapperPriceTextProduct, WrapperQualityProduct, WrapperStyleColImage, WrapperStyleImageSmall, WrapperStyleNameProduct, WrapperStyleTextSell } from "./style"
-import { StarFilled, PlusOutlined, MinusOutlined } from '@ant-design/icons'
+import { PlusOutlined, MinusOutlined } from '@ant-design/icons'
 import ButtonComponent from "../ButtonCompnent/ButtonComponent"
 import * as ProductService from "../../services/ProductService"
 import { useQuery } from "@tanstack/react-query"
 import Loading from "../LoadingComponent/Loading"
-import { isPending } from "@reduxjs/toolkit"
 import { useDispatch, useSelector } from "react-redux"
 import { useLocation, useNavigate } from "react-router-dom"
-import { addOrderProduct } from "../../redux/slides/orderSlide"
+import { addOrderProduct, resetOrder } from "../../redux/slides/orderSlide";
 import { convertPrice } from "../../utils"
+import * as message from "../Message/Message";
 
 
 
 const ProductDetailsComponent = ({idProduct}) => {
     const [numProduct, setNumProduct] = useState(1)
     const user = useSelector((state) => state.user)
+    const order = useSelector((state) => state.order)
+    const [errorLimitOrder, setErrorLimitOrder] = useState(false)
     const navigate = useNavigate()
     const location = useLocation()
     const dispatch = useDispatch()
@@ -28,22 +29,44 @@ const ProductDetailsComponent = ({idProduct}) => {
     }
       const fetchGetDetailsProduct = async (context) => {
         const id = context?.queryKey && context?.queryKey[1];
-        console.log("id", id);
         const res = await ProductService.getDetailsProduct(id);
         return res.data;
       };
 
+      useEffect(() => {
+        const orderRedux = order?.orderItems?.find(
+          (item) => item.product === productDetails?._id
+        )
+        if((orderRedux?.amount + numProduct) <= orderRedux?.countInstock || (!orderRedux && productDetails?.countInStock > 0)) {
+          setErrorLimitOrder(false)
+        } else if (productDetails?.countInStock === 0) {
+          setErrorLimitOrder(true)
+        }
+      },[numProduct])
+
+      useEffect(() => {
+        if(order.isSuccessOrder) {
+          message.success("Added to cart");
+        }
+        return () => {
+          dispatch(resetOrder())
+        }
+      },[order.isSuccessOrder])
+
       
 
-      const handleChangeCount = (type) => {
+      const handleChangeCount = (type, limited) => {
         if(type === 'increase') {
+          if(!limited) {
             setNumProduct(numProduct + 1)
+          } 
         }else {
+          if(!limited) {
             setNumProduct(numProduct - 1)
+          }
+            
         }
       }
-
-  
     
  const { isPending, data: productDetails } = useQuery({
    queryKey: ["product-details", idProduct],
@@ -55,19 +78,27 @@ const ProductDetailsComponent = ({idProduct}) => {
    if (!user?.id) {
      navigate("/sign-in", { state: location?.pathname });
    } else {
-     dispatch(addOrderProduct({
-      orderItem: {
-        name: productDetails?.name,
-        amount: numProduct,
-        image: productDetails?.image,
-        price: productDetails?.price,
-        product: productDetails?._id,
-        discount: productDetails?.discount,
-        countInstock: productDetails?.countInStock
+    const orderRedux = order?.orderItems?.find((item) => item.product === productDetails?._id)
+    if((orderRedux?.amount + numProduct) <= orderRedux?.countInstock || (!orderRedux && productDetails?.countInStock > 0)) {
+           dispatch(
+             addOrderProduct({
+               orderItem: {
+                 name: productDetails?.name,
+                 amount: numProduct,
+                 image: productDetails?.image,
+                 price: productDetails?.price,
+                 product: productDetails?._id,
+                 discount: productDetails?.discount,
+                 countInstock: productDetails?.countInStock,
+              },
+            }
+          )
+        );
+      } else {
+        setErrorLimitOrder(true)
       }
-     }));
-   }
- };    
+    }
+  };    
 
   
     return (
@@ -173,13 +204,15 @@ const ProductDetailsComponent = ({idProduct}) => {
                     background: "transparent",
                     cursor: "pointer",
                   }}
-                  onClick={() => handleChangeCount("decrease")}
+                  onClick={() => handleChangeCount("decrease", numProduct === 1)}
                 >
                   <MinusOutlined style={{ color: "#000", fontSize: "15px" }} />
                 </button>
                 <WrapperInputNumber
                   onChange={onChange}
                   defaultValue={1}
+                  min={1}
+                  max={productDetails?.countInStock}
                   value={numProduct}
                   size="small"
                 />
@@ -189,30 +222,33 @@ const ProductDetailsComponent = ({idProduct}) => {
                     background: "transparent",
                     cursor: "pointer",
                   }}
-                  onClick={() => handleChangeCount("increase")}
+                  onClick={() => handleChangeCount("increase", numProduct === productDetails?.countInStock)}
                 >
                   <PlusOutlined style={{ color: "#000", fontSize: "15px" }} />
                 </button>
               </WrapperQualityProduct>
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-              <ButtonComponent
-                size={40}
-                styleButton={{
-                  background: "rgb(255, 57, 69)",
-                  height: "48px",
-                  width: "220px",
-                  border: "none",
-                  borderRadius: "4px",
-                }}
-                onClick={handleAddOrderProduct}
-                textButton={"Choose buy"}
-                styleTextButton={{
-                  color: "#fff",
-                  fontSize: "15px",
-                  fontWeight: "700",
-                }}
-              ></ButtonComponent>
+            <div style={{ display: "flex", gap: "12px" }}>
+              <div>
+                <ButtonComponent
+                  size={40}
+                  styleButton={{
+                    background: "rgb(255, 57, 69)",
+                    height: "48px",
+                    width: "220px",
+                    border: "none",
+                    borderRadius: "4px",
+                  }}
+                  onClick={handleAddOrderProduct}
+                  textbutton={"Choose buy"}
+                  styleTextButton={{
+                    color: "#fff",
+                    fontSize: "15px",
+                    fontWeight: "700",
+                  }}
+                ></ButtonComponent>
+                {errorLimitOrder && <div style={{ color: "red" }}>Product is out of stock</div>}
+              </div>
               <ButtonComponent
                 size={40}
                 styleButton={{
@@ -222,7 +258,7 @@ const ProductDetailsComponent = ({idProduct}) => {
                   border: "1px solid rgb(13, 92, 182)",
                   borderRadius: "4px",
                 }}
-                textButton={"Buy and pay later"}
+                textbutton={"Buy and pay later"}
                 styleTextButton={{
                   color: "rgb(13, 92, 182)",
                   fontSize: "15px",

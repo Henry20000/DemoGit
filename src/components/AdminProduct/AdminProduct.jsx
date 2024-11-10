@@ -87,7 +87,6 @@ const AdminProduct = () => {
     },
   });
 
-  console.log("mutationDeletedMany", mutationDeletedMany);
 
   const getAllProducts = async () => {
     const res = await ProductService.getAllProduct();

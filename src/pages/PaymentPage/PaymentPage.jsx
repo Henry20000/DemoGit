@@ -99,7 +99,6 @@ const PaymentPage = () => {
 
   const handleAddOrder = () => {
     if(user?.access_token && order?.orderItemsSelected && user?.name && user?.address && user?.phone && user?.city && priceMemo && user?.id) {
-      console.log("Payment method:", payment);
        mutationAddOrder.mutate({
          token: user?.access_token,
          orderItems: order?.orderItemsSelected,
@@ -112,6 +111,7 @@ const PaymentPage = () => {
          shippingPrice: diliveryPriceMemo,
          totalPrice: totalPriceMemo,
          user: user?.id,
+         email: user?.email
        }) 
     }
   }
@@ -188,7 +188,8 @@ const PaymentPage = () => {
        totalPrice: totalPriceMemo,
        user: user?.id,
        isPaid: true,
-       paidAt: details.update_time
+       paidAt: details.update_time,
+       email: user?.email
      }); 
   }
 
@@ -235,7 +236,6 @@ const PaymentPage = () => {
       setsdkReady(true)
     }
     document.body.appendChild(script)
-    console.log('data', data);
    }
 
    useEffect(() => {
@@ -375,7 +375,7 @@ const PaymentPage = () => {
               {payment === "paypal" && sdkReady ? (
                 <div style={{ width: "320px" }}>
                     <PayPalButton
-                      amount={(totalPriceMemo/25000).toFixed(2)}
+                      amount={Math.round(totalPriceMemo / 30000)}
                       onSuccess={onSuccessPaypal}
                       onError={() => {
                         alert("Error");
@@ -393,7 +393,7 @@ const PaymentPage = () => {
                     border: "none",
                     borderRadius: "4px",
                   }}
-                  textButton={"Make an Order"}
+                  textbutton={"Make an Order"}
                   styleTextButton={{
                     color: "#fff",
                     fontSize: "15px",

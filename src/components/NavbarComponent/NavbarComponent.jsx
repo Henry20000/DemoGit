@@ -26,7 +26,6 @@ const NavbarComponent = () => {
                 )
                 case 'star':
                     return options.map((option) => {
-                        console.log('check', option)
                         return (
                             <div style={{display: 'flex',}}>
                                  <Rate style={{ fontSize: '12px'}} disabled defaultValue={option} />
@@ -52,7 +51,6 @@ const NavbarComponent = () => {
             <WrapperContent>
                {renderContent('text', ['Wheyprotein', 'Creatine', 'BCAAs, EAAs'])}
             </WrapperContent>
-         
         </div>
     )
 }

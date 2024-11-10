@@ -51,7 +51,6 @@ const OrderPage = () => {
       setListChecked([...listChecked, e.target.value])
     }
   };
-  console.log("listChecked", listChecked);
 
 
   const handleChangeCount = (type, idProduct, limited) => {
@@ -61,7 +60,7 @@ const OrderPage = () => {
       }
     }else {
       if(!limited) {
-        dispatch(decreaseAmount({idProduct}))
+          dispatch(decreaseAmount({ idProduct }))
       }
     }
   }
@@ -145,7 +144,6 @@ const OrderPage = () => {
   }
 
   const handleAddCard = () => {
-     console.log('user', user);
      if(!order?.orderItemsSelected?.length) {
       message.error("Please select a product")
      }else if(!user?.phone || !user?.address || !user?.name || !user.city) {
@@ -260,7 +258,7 @@ const OrderPage = () => {
             <WrapperListOrder>
               {order?.orderItems?.map((order) => {
                 return (
-                  <WrapperItemOrder>
+                  <WrapperItemOrder key={order?.product}>
                     <div
                       style={{
                         width: "390px",
@@ -339,7 +337,8 @@ const OrderPage = () => {
                             handleChangeCount(
                               "increase",
                               order?.product,
-                              order?.amount === order.countInstock
+                              order?.amount === order.countInstock,
+                              order?.amount === 1
                             )
                           }
                         >
@@ -468,7 +467,7 @@ const OrderPage = () => {
                 border: "none",
                 borderRadius: "4px",
               }}
-              textButton={"Buy"}
+              textbutton={"Buy"}
               styleTextButton={{
                 color: "#fff",
                 fontSize: "15px",

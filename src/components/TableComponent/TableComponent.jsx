@@ -18,8 +18,6 @@ const TableComponent = (props) => {
     return arr
    }, [columns])
 
-   console.log("newColumnExport", newColumnExport);
-
    const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
       setRowSelectedKeys(selectedRowKeys);

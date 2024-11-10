@@ -20,7 +20,6 @@ const HomePage = () => {
     const [limit, setLimit] = useState(6)
     const [typeProducts, setTypeProducts] = useState([])
     const fetchProductAll = async (context) => {
-      console.log("context", context);
       const limit = context?.queryKey && context?.queryKey[1]
       const search = context?.queryKey && context?.queryKey[2];
       const res = await ProductService.getAllProduct(search, limit)
@@ -101,7 +100,7 @@ const HomePage = () => {
               }}
             >
               <WrapperButtonMore
-                textButton={isPreviousData ? "Load more" : "See more"}
+                textbutton={isPreviousData ? "Load more" : "See more"}
                 type="outline"
                 styleButton={{
                   border: "1px solid rgb(11, 116, 229)",

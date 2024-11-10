@@ -1,31 +1,32 @@
 import { Menu } from "antd";
 import React, { useState } from "react";
 import { getItem } from "../../utils";
-import { UserOutlined , AppstoreOutlined} from '@ant-design/icons';
+import { UserOutlined , AppstoreOutlined, ShoppingCartOutlined} from '@ant-design/icons';
 import HeaderComponent from "../../components/HeaderComponent/HeaderComponent";
 import AdminUser from "../../components/AdminUser/AdminUser";
 import AdminProduct from "../../components/AdminProduct/AdminProduct";
+import OrderAdmin from "../../components/OrderAdmin/OrderAdmin";
 
 const AdminPage = () => {
     const items = [
-        getItem('User', 'user', <UserOutlined/>), 
-        getItem('Product', 'product', <AppstoreOutlined/>)
+      getItem("User", "user", <UserOutlined />),
+      getItem("Product", "product", <AppstoreOutlined />),
+      getItem("Order", "order", <ShoppingCartOutlined />),
     ];
 
     const [keySelected, setKeySelected] = useState('')
 
     const renderPage = (key) => {
-        switch(key) {
-            case 'user':
-                return (
-                    <AdminUser/>
-                )
-            case 'product':
-                return (
-                    <AdminProduct/>
-                )
-                default: 
-                    return <></>
+      console.log('key :>> ', key);
+        switch (key) {
+          case "user":
+            return <AdminUser />;
+          case "product":
+            return <AdminProduct />;
+          case "order":
+            return <OrderAdmin />;
+          default:
+            return <></>;
         }
     }
 
@@ -42,7 +43,6 @@ const AdminPage = () => {
     const handleOnclick = ({ key }) => {
         setKeySelected(key)
     }
-    console.log('keySelected', keySelected);
 
     return (
         <>

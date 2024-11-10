@@ -189,7 +189,7 @@ const AdminUser = () => {
             <Space>
               <Button
                 type="primary"
-                onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+                //onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
                 icon={<SearchOutlined />}
                 size="small"
                 style={{
@@ -332,7 +332,6 @@ const AdminUser = () => {
       }, [isSuccessUpdated]);
 
       const handleCancelDelete = () => {
-        console.log("can");
         setIsModalOpenDelete(false);
       };
 

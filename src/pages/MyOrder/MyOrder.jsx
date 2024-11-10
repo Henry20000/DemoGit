@@ -66,7 +66,7 @@ const MyOrderPage = () => {
 
   const renderProduct = (data) => {
     return data?.map((order) => {
-      return <WrapperHeaderItem>
+      return <WrapperHeaderItem key={order?._id}>
         <img
           src={order?.image}
           style={{
@@ -107,7 +107,7 @@ const MyOrderPage = () => {
     <Loading isLoading={isLoading || isLoadingCancel}>
       <WrapperContainer>
         <div style={{height: '100%', width: '1270px', margin: '0 auto'}}>
-          <h4 style={{fontSize: '13px', paddingLeft: '145px'}}>Đơn hàng của tôi</h4>
+          <h4 style={{fontSize: '13px', paddingLeft: '145px'}}>My Order</h4>
           <WrapperListOrder>
              {data?.map((order) => {
               return (
@@ -164,7 +164,7 @@ const MyOrderPage = () => {
                           border: "1px solid #9255FD",
                           borderRadius: "4px",
                         }}
-                        textButton={"Hủy đơn hàng"}
+                        textbutton={"Hủy đơn hàng"}
                         styleTextButton={{ color: "#9255FD", fontSize: "14px" }}
                       />
                       <ButtonComponent
@@ -175,7 +175,7 @@ const MyOrderPage = () => {
                           border: "1px solid #9255FD",
                           borderRadius: "4px",
                         }}
-                        textButton={"Xem chi tiết"}
+                        textbutton={"Xem chi tiết"}
                         styleTextButton={{ color: "#9255FD", fontSize: "14px" }}
                       />
                     </div>
