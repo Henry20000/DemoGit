@@ -157,22 +157,22 @@ const OrderAdmin = () => {
           dataIndex: "totalPrice",
           //sorter: (a, b) => a.totalPrice.length - b.totalPrice.length,
           //...getColumnSearchProps("totalPrice"),
-          filters: [
-            {
-              text: ">= 2,000,000 VND",
-              value: ">=",
-            },
-            {
-              text: "<= 2,000,000 VND",
-              value: "<=",
-            },
-          ],
-          onFilter: (value, record) => {
-            if (value === ">=") {
-              return record.totalPrice >= 2000000; 
-            }
-            return record.totalPrice <= 2000000; 
-          },
+          // filters: [
+          //   {
+          //     text: ">= 2,000,000 VND",
+          //     value: ">=",
+          //   },
+          //   {
+          //     text: "<= 2,000,000 VND",
+          //     value: "<=",
+          //   },
+          // ],
+          // onFilter: (value, record) => {
+          //   if (value === ">=") {
+          //     return record.totalPrice >= 2000000; 
+          //   }
+          //   return record.totalPrice <= 2000000; 
+          // },
         },
       ];
 
