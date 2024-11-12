@@ -25,7 +25,7 @@ const AdminProduct = () => {
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   const [isPendingUpdate, setIsPendingUpdate] = useState(false);
   const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
-  const [typeSelect, setTypeSelect] = useState('')
+  const [typeSelect, setTypeSelect] = useState("");
   const user = useSelector((state) => state?.user);
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
@@ -40,15 +40,23 @@ const AdminProduct = () => {
     countInStock: "",
     newType: "",
     discount: "",
-  })
+  });
   const [stateProduct, setStateProduct] = useState(inittial());
   const [stateProductDetails, setStateProductDetails] = useState(inittial());
   const [form] = Form.useForm();
 
   const mutation = useMutation({
     mutationFn: (data) => {
-      const { name, price, description, rating, image, type, countInStock, discount } =
-        data;
+      const {
+        name,
+        price,
+        description,
+        rating,
+        image,
+        type,
+        countInStock,
+        discount,
+      } = data;
       const res = ProductService.createProduct({
         name,
         price,
@@ -57,7 +65,7 @@ const AdminProduct = () => {
         image,
         type,
         countInStock,
-        discount
+        discount,
       });
       return res;
     },
@@ -87,7 +95,6 @@ const AdminProduct = () => {
     },
   });
 
-
   const getAllProducts = async () => {
     const res = await ProductService.getAllProduct();
     return res;
@@ -111,9 +118,9 @@ const AdminProduct = () => {
   };
 
   useEffect(() => {
-    if(!isModalOpen) {
-      form.setFieldsValue(stateProductDetails)
-    }else {
+    if (!isModalOpen) {
+      form.setFieldsValue(stateProductDetails);
+    } else {
       form.setFieldsValue(inittial());
     }
   }, [form, stateProductDetails, isModalOpen]);
@@ -140,10 +147,10 @@ const AdminProduct = () => {
     );
   };
 
-        const fetchAllTypeProduct = async () => {
-          const res = await ProductService.getAllTypeProduct();
-          return res;
-        };
+  const fetchAllTypeProduct = async () => {
+    const res = await ProductService.getAllTypeProduct();
+    return res;
+  };
 
   const { data, isPending, isSuccess, isError } = mutation;
   const {
@@ -170,10 +177,10 @@ const AdminProduct = () => {
     queryFn: getAllProducts,
   });
 
-   const typeProduct = useQuery({
-     queryKey: ["type-product"],
-     queryFn: fetchAllTypeProduct,
-   });
+  const typeProduct = useQuery({
+    queryKey: ["type-product"],
+    queryFn: fetchAllTypeProduct,
+  });
 
   const { isLoading: isLoadingProducts, data: products } = queryProduct;
   const renderAction = () => {
@@ -191,14 +198,14 @@ const AdminProduct = () => {
     );
   };
 
-  
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     // setSearchText(selectedKeys[0]);
     // setSearchedColumn(dataIndex);
   };
-  const handleReset = (clearFilters) => {
+  const handleReset = (confirm, clearFilters) => {
     clearFilters();
+    confirm();
     // setSearchText('');
   };
 
@@ -241,7 +248,7 @@ const AdminProduct = () => {
             Search
           </Button>
           <Button
-            onClick={() => clearFilters && handleReset(clearFilters)}
+            onClick={() => clearFilters && handleReset(confirm, clearFilters)}
             size="small"
             style={{
               width: 90,
@@ -433,9 +440,12 @@ const AdminProduct = () => {
       description: stateProduct.description,
       rating: stateProduct.rating,
       image: stateProduct.image,
-      type: stateProduct.type === 'add_type' ? stateProduct.newType : stateProduct.type,
+      type:
+        stateProduct.type === "add_type"
+          ? stateProduct.newType
+          : stateProduct.type,
       countInStock: stateProduct.countInStock,
-      discount: stateProduct.discount
+      discount: stateProduct.discount,
     };
     mutation.mutate(params, {
       onSettled: () => {
@@ -492,11 +502,11 @@ const AdminProduct = () => {
   };
 
   const handleChangeSelect = (value) => {
-        setStateProduct({
-          ...stateProduct,
-          type: value
-        })
-  }
+    setStateProduct({
+      ...stateProduct,
+      type: value,
+    });
+  };
 
   return (
     <div>
