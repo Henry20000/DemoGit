@@ -228,7 +228,18 @@ const OrderPage = () => {
         <div style={{ display: "flex", justifyContent: "center" }}>
           <WrapperLeft>
             <WrapperStyleHeader>
-              <StepComponent items={itemsDelivery} current={diliveryPriceMemo === 10000 ? 2 : diliveryPriceMemo === 20000 ? 1 : order.orderItemsSelected.length === 0 ? 0 : 3}/>
+              <StepComponent
+                items={itemsDelivery}
+                current={
+                  diliveryPriceMemo === 10000
+                    ? 2
+                    : diliveryPriceMemo === 20000
+                    ? 1
+                    : order.orderItemsSelected.length === 0
+                    ? 0
+                    : 3
+                }
+              />
             </WrapperStyleHeader>
             <WrapperStyleHeader>
               <span style={{ display: "inline-block", width: "390px" }}>
@@ -313,7 +324,11 @@ const OrderPage = () => {
                             cursor: "pointer",
                           }}
                           onClick={() =>
-                            handleChangeCount("decrease", order?.product, order?.amount === 1)
+                            handleChangeCount(
+                              "decrease",
+                              order?.product,
+                              order?.amount === 1
+                            )
                           }
                         >
                           <MinusOutlined
@@ -391,7 +406,7 @@ const OrderPage = () => {
                     justifyContent: "space-between",
                   }}
                 >
-                  <span style={{ fontSize: "13px" }}>Subtotal</span>
+                  <span style={{ fontSize: "13px" }}>Estimated</span>
                   <span
                     style={{
                       color: "#000",

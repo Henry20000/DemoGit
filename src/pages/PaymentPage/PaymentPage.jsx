@@ -22,28 +22,29 @@ import { updateUser } from "../../redux/slides/userSlide";
 import { useNavigate } from "react-router-dom";
 import { removeAllOrderProduct } from "../../redux/slides/orderSlide";
 import * as PaymentService from "../../services/PaymentService"
-import { PayPalButton } from "react-paypal-button-v2";
+import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 
 
 const PaymentPage = () => {
-  const order = useSelector((state) => state.order)
-  const user = useSelector((state) => state.user)
-  
-  const [delivery, setDelivery] = useState('fast')
-  const [payment, setPayment] = useState('later_money')
-  const navigate = useNavigate()
-  const [sdkReady, setsdkReady] = useState(false)
+  const order = useSelector((state) => state.order);
+  const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const [isOpenModalUpdateInfo, setIsOpenModalUpdateInfo] = useState(false)
-   const [stateUserDetails, setStateUserDetails] = useState({
-     name: '',
-     phone: '',
-     address: '',
-     city: ''
-   })
+  const [delivery, setDelivery] = useState("fast");
+  const [payment, setPayment] = useState("later_money");
+  const [sdkReady, setSdkReady] = useState(false);
+  const [clientId, setClientId] = useState(null);
+
+  const [isOpenModalUpdateInfo, setIsOpenModalUpdateInfo] = useState(false);
+  const [stateUserDetails, setStateUserDetails] = useState({
+    name: "",
+    phone: "",
+    address: "",
+    city: "",
+  });
   const [form] = Form.useForm();
-  const dispatch = useDispatch()
 
 
     useEffect(() => {
@@ -226,25 +227,14 @@ const PaymentPage = () => {
     setPayment(e.target.value)
    }
 
-   const addPaypalScript = async () => {
-    const { data }  = await PaymentService.getConfig()
-    const script = document.createElement('script')
-    script.type = 'text/javascript'
-    script.src = `https://www.paypal.com/sdk/js?client-id=${data}`
-    script.async = true;
-    script.onload = () => {
-      setsdkReady(true)
-    }
-    document.body.appendChild(script)
-   }
-
-   useEffect(() => {
-    if(!window.paypal) {
-      addPaypalScript()
-    }else {
-      setsdkReady(true)
-    }
-   }, [])
+useEffect(() => {
+  const fetchClientId = async () => {
+    const { data } = await PaymentService.getConfig();
+    setClientId(data);
+    setSdkReady(true); // PayPal SDK tự động tải thông qua react-paypal-js
+  };
+  fetchClientId();
+}, []);
 
   return (
     <div style={{ background: "#f5f5fa", width: "100%", height: "100vh" }}>
@@ -373,15 +363,33 @@ const PaymentPage = () => {
                 </WrapperTotal>
               </div>
               {payment === "paypal" && sdkReady ? (
-                <div style={{ width: "320px" }}>
-                    <PayPalButton
-                      amount={Math.round(totalPriceMemo / 30000)}
-                      onSuccess={onSuccessPaypal}
-                      onError={() => {
-                        alert("Error");
+                <PayPalScriptProvider
+                  options={{ "client-id": clientId, currency: "USD" }} // Thay YOUR_CLIENT_ID bằng client-id thật
+                >
+                  <div style={{width: '320px'}}>
+                    <PayPalButtons
+                      style={{ layout: "vertical" }}
+                      createOrder={(data, actions) => {
+                        return actions.order.create({
+                          purchase_units: [
+                            {
+                              amount: {
+                                value: (totalPriceMemo / 25000).toFixed(2), // Giá trị đơn hàng
+                              },
+                            },
+                          ],
+                        });
+                      }}
+                      onApprove={async (data, actions) => {
+                        const details = await actions.order.capture();
+                        onSuccessPaypal(details, data); // Gọi hàm xử lý thành công
+                      }}
+                      onError={(err) => {
+                        alert("PayPal Error: " + err);
                       }}
                     />
-                </div>
+                  </div>
+                </PayPalScriptProvider>
               ) : (
                 <ButtonComponent
                   onClick={() => handleAddOrder()}
@@ -399,7 +407,7 @@ const PaymentPage = () => {
                     fontSize: "15px",
                     fontWeight: "700",
                   }}
-                ></ButtonComponent>
+                />
               )}
             </WrapperRight>
           </div>

@@ -114,26 +114,26 @@ const MyOrderPage = () => {
                 <WrapperItemOrder key={order?._id}>
                   <WrapperStatus>
                     <span style={{ fontSize: "13px", fontWeight: "bold" }}>
-                      Trạng thái
+                      Status
                     </span>
                     <div>
                       <span
                         style={{ color: "rgb(255, 66, 78)", fontSize: "13px" }}
                       >
-                        Giao hàng:{" "}
+                        Delivery:{" "}
                       </span>
                       <span style={{ fontSize: "13px" }}>{`${
-                        order.isPaid ? "Đã giao hàng" : "Chưa giao hàng"
+                        order.isPaid ? "Delivered" : "Not yet delivered"
                       }`}</span>
                     </div>
                     <div>
                       <span
                         style={{ color: "rgb(255, 66, 78)", fontSize: "13px" }}
                       >
-                        Thanh toán:{" "}
+                        Pay:{" "}
                       </span>{" "}
                       <span style={{ fontSize: "13px" }}>{`${
-                        order.isPaid ? "Đã thanh toán" : "Chưa thanh toán"
+                        order.isPaid ? "Paid" : "Not yet paid"
                       }`}</span>
                     </div>
                   </WrapperStatus>
@@ -164,7 +164,7 @@ const MyOrderPage = () => {
                           border: "1px solid #9255FD",
                           borderRadius: "4px",
                         }}
-                        textbutton={"Hủy đơn hàng"}
+                        textbutton={"Cancel order"}
                         styleTextButton={{ color: "#9255FD", fontSize: "14px" }}
                       />
                       <ButtonComponent
@@ -175,7 +175,7 @@ const MyOrderPage = () => {
                           border: "1px solid #9255FD",
                           borderRadius: "4px",
                         }}
-                        textbutton={"Xem chi tiết"}
+                        textbutton={"See details"}
                         styleTextButton={{ color: "#9255FD", fontSize: "14px" }}
                       />
                     </div>
