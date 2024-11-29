@@ -57,25 +57,9 @@ export const WrapperInfo = styled.div`
   background: #fff;
   border-top-right-radius: 6px;
   border-top-left-radius: 6px;
-  width: 280px;
-  /* display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 20px;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  height: 70px; */
 `;
 
 export const WrapperTotal = styled.div`
-  /* display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  padding: 17px 20px;
-  background: #fff;
-  border-bottom-right-radius: 6px;
-  border-bottom-left-radius: 6px; */
   display: flex;
   justify-content: space-between;
   align-items: center;

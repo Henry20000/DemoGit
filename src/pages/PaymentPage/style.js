@@ -58,7 +58,6 @@ export const WrapperInfo = styled.div`
   background: #fff;
   border-top-right-radius: 6px;
   border-top-left-radius: 6px;
-  width: 280px;
 `;
 
 export const Lable = styled.span`
@@ -68,13 +67,6 @@ export const Lable = styled.span`
 `;
 
 export const WrapperTotal = styled.div`
-  /* display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  padding: 17px 20px;
-  background: #fff;
-  border-bottom-right-radius: 6px;
-  border-bottom-left-radius: 6px; */
   display: flex;
   justify-content: space-between;
   align-items: center;
