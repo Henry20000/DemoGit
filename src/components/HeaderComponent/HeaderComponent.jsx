@@ -1,5 +1,4 @@
-import { Badge, Button, Col, Popover } from 'antd'
-import Search from 'antd/lib/transfer/search'
+import { Badge, Col, Popover } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { WrapperContentPopup, WrapperHeader, WrapperHeaderAccout, WrapperTextHeader, WrapperTextHeaderSmall } from './style'
 import {
@@ -14,6 +13,7 @@ import * as UserService from '../../services/UserService'
 import { resetUser } from "../../redux/slides/userSlide"
 import Loading from '../LoadingComponent/Loading';
 import { searchProduct } from '../../redux/slides/productSlide';
+import { initialOrder } from '../../redux/slides/orderSlide';
 
 const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
   const navigate = useNavigate()
@@ -33,7 +33,9 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
     setLoading(true)
     await UserService.logoutUser()
     dispatch(resetUser())
+    dispatch(initialOrder());
     setLoading(false)
+    localStorage.clear();
   }
 
   useEffect(() => {

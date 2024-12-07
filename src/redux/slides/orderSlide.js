@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { floatButtonPrefixCls } from "antd/es/float-button/FloatButton";
 
 const initialState = {
   orderItems: [
@@ -42,6 +41,10 @@ export const orderSlide = createSlice({
     resetOrder: (state) => {
       state.isSuccessOrder = false
     },
+    initialOrder() {
+      return initialState;
+    }
+    ,
     increaseAmount: (state, action) => {
       const { idProduct } = action.payload
       const itemOrder = state?.orderItems?.find(
@@ -114,6 +117,7 @@ export const {
   removeAllOrderProduct,
   selectedOrder,
   resetOrder,
+  initialOrder
 } = orderSlide.actions;
 
 export default orderSlide.reducer;
